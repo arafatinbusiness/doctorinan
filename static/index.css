@@ -1,0 +1,22 @@
+/* Font face definition for SutonnyMJ Regular */
+@font-face {
+  font-family: 'SutonnyMJ';
+  src: url('/SutonnyMJ Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply SutonnyMJ font to Bangla text */
+.bangla-text {
+  font-family: 'SutonnyMJ', 'Noto Sans Bengali', 'SolaimanLipi', 'Kalpurush', 'Siyam Rupali', Arial, sans-serif;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.8;
+}
+
+/* Ensure proper rendering for Bangla characters */
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

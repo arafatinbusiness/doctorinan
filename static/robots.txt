@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /private
+
+Sitemap: https://doctorinan.com/sitemap.xml
+Sitemap: https://www.doctorinan.com/sitemap.xml
