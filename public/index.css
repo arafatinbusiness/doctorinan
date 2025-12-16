@@ -14,6 +14,14 @@
   line-height: 1.8;
 }
 
+/* Font for message content (supports both English and Bangla) */
+.message-content {
+  font-family: 'Noto Sans Bengali', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
 /* Ensure proper rendering for Bangla characters */
 * {
   text-rendering: optimizeLegibility;

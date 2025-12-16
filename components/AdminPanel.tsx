@@ -24,6 +24,8 @@ const AdminPanel: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
+  const [selectedConsultation, setSelectedConsultation] = useState<Consultation | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Obfuscated password: 'doctorstrange' (reversed and encoded)
   const getAdminPassword = (): string => {
@@ -92,6 +94,16 @@ const AdminPanel: React.FC = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const openModal = (consult: Consultation) => {
+    setSelectedConsultation(consult);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedConsultation(null);
   };
 
   if (!isAuthenticated) {
@@ -236,8 +248,18 @@ const AdminPanel: React.FC = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                             {consult.phone}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-700 max-w-xs truncate">
-                            {consult.situation || <span className="text-gray-400">(empty)</span>}
+                          <td className="px-6 py-4 text-sm text-gray-700 max-w-xs">
+                            {consult.situation ? (
+                              <button
+                                onClick={() => openModal(consult)}
+                                className="text-left truncate w-full hover:text-blue-600 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-300 rounded"
+                                title="Click to view full message"
+                              >
+                                {consult.situation}
+                              </button>
+                            ) : (
+                              <span className="text-gray-400">(empty)</span>
+                            )}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             {consult.currency} {consult.amount}
@@ -314,6 +336,47 @@ const AdminPanel: React.FC = () => {
               <p className="mt-2">Showing {itemsPerPage} records per page. Data updates in real‑time.</p>
             </div>
           </>
+        )}
+        {/* Message Detail Modal */}
+        {isModalOpen && selectedConsultation && (
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+            onClick={closeModal}
+          >
+            <div 
+              className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center p-6 border-b">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Message Details</h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Phone: {selectedConsultation.phone} • Date: {selectedConsultation.createdAt?.toDate ? selectedConsultation.createdAt.toDate().toLocaleString() : 'N/A'}
+                  </p>
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="text-gray-400 hover:text-gray-600 text-2xl font-bold p-2 rounded-full hover:bg-gray-100 transition"
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="p-6 overflow-y-auto flex-1">
+                <div className="message-content text-gray-800">
+                  {selectedConsultation.situation}
+                </div>
+              </div>
+              <div className="p-6 border-t flex justify-end">
+                <button
+                  onClick={closeModal}
+                  className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
